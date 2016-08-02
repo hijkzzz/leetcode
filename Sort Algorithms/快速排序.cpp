@@ -22,8 +22,8 @@ void quick_sort(int l, int r, vector<int> &a)
 
 int main()
 {
-    vector<int> test{1, 32, 4, 5, 21, 3, 8};
-    quick_sort(0, test.size() - 1, test);
-    copy(test.begin(), test.end(), ostream_iterator<int>(cout," "));
+    vector<int> a = { 1, 32, 4, 5, 21, 3, 8 };
+    quick_sort(0, a.size() - 1, a);
+    copy(a.begin(), a.end(), ostream_iterator<int>(cout," "));
     return 0;
 }
