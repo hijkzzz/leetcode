@@ -1,24 +1,28 @@
 class Solution {
 public:
     vector<string> findRepeatedDnaSequences(string s) {
-        if (s.size() < 10) return vector<string>();
-        vector<int> alpha(26, 0);
-        alpha['A' - 'A'] = 0;
-        alpha['C' - 'A'] = 1;
-        alpha['G' - 'A'] = 2;
-        alpha['T' - 'A'] = 3;
-        
+        if (s.length() < 10) return vector<string>();
+
+        vector<char> map(256, -1);
+        map['A' - 'A'] = 0;
+        map['C' - 'A'] = 1;
+        map['T' - 'A'] = 2;
+        map['G' - 'A'] = 3;
+
         vector<string> result;
-        unordered_set<int> words;
-        unordered_set<int> double_words;
-        for (int i = 0; i < s.size() - 9; ++i) {
-            int v = 0;
-            for (int j = 0; j < 10; ++j) {
-                v <<= 2;
-                v |= alpha[s[i + j] - 'A'];
+        unordered_map<int, int> dup;
+
+        for (int i = 0; i < s.length() - 9; ++i) {
+            int bits = 0;
+            for (int j = i; j < i + 10; ++j) {
+                bits <<= 2;
+                bits |= map[s[j] - 'A'];
             }
-            if (!(words.insert(v)).second && (double_words.insert(v)).second)
+            if (dup.find(bits) == dup.end()) dup[bits] = 1;
+            else if (dup[bits] == 1) {
                 result.push_back(s.substr(i, 10));
+                dup[bits] = -1;
+            }
         }
         return result;
     }

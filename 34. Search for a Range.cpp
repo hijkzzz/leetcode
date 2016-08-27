@@ -3,48 +3,33 @@
  * http://www.cnblogs.com/wuyuegb2312/archive/2013/05/26/3090369.html
  */
 class Solution {
-    public:
-        vector<int> searchRange(vector<int>& nums, int target) {
-            int f = binary_search_first(nums, target);
-            int l = binary_search_last(nums, target);
+public:
+    vector<int> searchRange(vector<int>& nums, int target) {
+        int first = -1, last = -1;
 
-            return {f, l};
+        // 查找下界
+        int l = 0, r = nums.size() - 1;
+        while (l < r) {
+            int m = l + (r - l) / 2;
+            if (nums[m] >= target)
+                r = m;
+            else
+                l = m + 1;
         }
+        if (nums[l] == target) first = l;
 
-        int binary_search_first(vector<int>& nums, int target) {
-            if (nums.size() == 0) return -1;
-
-            int i = 0, j = nums.size() - 1;
-            // == 会导致死循环
-            while (i < j) {
-                int mid = i + (j - i) / 2;
-
-                if (nums[mid] < target) {
-                    i = mid + 1;
-                } else {
-                    j = mid;
-                }
-            }
-
-            return nums[i] == target ? i : -1;
+        // 查找上界
+        l = 0, r = nums.size() - 1;
+        while (l < r) {
+            // 当 nums[l] == nums[r] == target, +1 避免死循环
+            int m = l + (r - l + 1) / 2;
+            if (nums[m] <= target)
+                l = m;
+            else
+                r = m - 1;
         }
+        if (nums[l] == target) last = l;
 
-        int binary_search_last(vector<int>& nums, int target) {
-            if (nums.size() == 0) return -1;
-
-            int i = 0, j = nums.size() - 1;
-
-            while (i < j) {
-                //向右靠近
-                int mid = i + (j - i) / 2 + ((j - i) & 1);
-
-                if (nums[mid] <= target) {
-                    i = mid;
-                } else {
-                    j = mid - 1;
-                }
-            }
-
-            return nums[j] == target ? i : -1;
-        }
+        return {first, last};
+    }
 };
