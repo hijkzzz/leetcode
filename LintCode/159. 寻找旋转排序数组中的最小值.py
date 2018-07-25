@@ -8,6 +8,7 @@ class Solution:
         i = 0
         j = len(nums) - 1
         
+        # 当使用 i = m 或者 j = m 时要分析下边界情况
         while i < j:
             m = (i + j) // 2
             if nums[m] > nums[j]:
